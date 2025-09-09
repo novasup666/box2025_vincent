@@ -28,7 +28,7 @@ N = len(genome)
 rand_genome="".join(random.choices("ATCG",k=N))
 
 def fibword(n):
-    if n = 1:
+    if n == 1:
         return "A"
     mn = 1
     mnp1 = 2
