@@ -47,10 +47,10 @@ def fibword(n):
 
 q3 = sw_complexity(genome,N,K)
 q4 = sw_complexity(rand_genome,N,K)
-q4 = sw_complexity(fibword(N),N,K)
+q5 = sw_complexity(fibword(N),N,K)
 
 
-fig, (ax1, ax2) = plt.subplots(1, 3)
+fig, (ax1, ax2,ax3) = plt.subplots(1, 3)
 ax1.plot(q3)
 ax1.set_title("subword complexity of the genome")
 ax2.plot(q4)
