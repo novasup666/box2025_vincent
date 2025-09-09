@@ -12,21 +12,50 @@ genome = "".join(L)
 #"""
 
 #genome = "azeraazterzatetazetazretareztraetraeztazetraeztraeztrazetrerztazeeeeeeeterzteraezazteraztetraezatzetraeztrazetraze"
-K = 30
+def sw_complexity(genome,N,K):
+    subwords = {i:set() for i in range(1,K+1)}
+    for i in range(N):
+        for j in range(1,K+1):
+            if i+j < N:
+                subwords[j].add(genome[i:i+j])
 
-subwords = {i:set() for i in range(1,K+1)}
+    return [len(subwords[k]) for k in range(1,K+1)]
+
+K = 30
 
 N = len(genome)
 
-for i in range(N):
-    for j in range(1,K+1):
-        if i+j < N:
-            subwords[j].add(genome[i:i+j])
+rand_genome="".join(random.choices("ATCG",k=N))
 
-result = [len(subwords[k]) for k in range(1,K+1)]
+def fibword(n):
+    if n = 1:
+        return "A"
+    mn = 1
+    mnp1 = 2
+    w_n = "A"
+    w_np1 = "AB"
+    while mnp1 <n:
+        tmp = w_np1
+        w_np1 = w_np1 + w_n
+        w_n = tmp
 
-plt.plot(result)
+        tmp = mnp1
+        mnp1 += mn
+        mn = tmp
+        
+    return w_np1
+
+q3 = sw_complexity(genome,N,K)
+q4 = sw_complexity(rand_genome,N,K)
+q4 = sw_complexity(fibword(N),N,K)
+
+
+fig, (ax1, ax2) = plt.subplots(1, 3)
+ax1.plot(q3)
+ax1.set_title("subword complexity of the genome")
+ax2.plot(q4)
+ax2.set_title("subword complexity of a random genome")
+ax3.plot(q5)
+ax3.set_title("subword complexity of a fibonacci word")
 
 plt.show()
-
-rand_genome="".join(random.choices("ATCG",k=N))
