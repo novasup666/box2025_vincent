@@ -12,6 +12,28 @@ def ns_csl(file_name):
         l = f.readline()
     return(nb_seq,cumulative_seq_length)
 
+
+def cano_kmers(sequences,k):
+    cano_kmers = set()
+    def canonize(kmer):
+        candidate = []
+        for c in kmer:
+            if c == "A":
+                candidate.append("C")
+            if c == "C":
+                candidate.append("A")
+            if c == "T":
+                candidate.append("G")            
+            if c == "G":
+                candidate.append("T")
+        return min(kmer,candidate)
+
+    for s in sequences : 
+        for i in range(len(s)-k):
+            cano_kmers.add(canonize(s[i:i+k]))
+    return list(cano_kmers)
+
 for name in file_names:
     (n,l) = ns_csl(name)
     print(f"{name}: {n} sequences of total length {l}")
+
