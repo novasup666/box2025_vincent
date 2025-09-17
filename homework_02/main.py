@@ -39,22 +39,7 @@ def cano_kmers(sequences,k):
             num_comp += comptable[kmer[i]]*(4**i)
         return min(num_kmer,num_comp)
 
-    """def canonize(kmer):
-        candidate = []
-        for c in kmer:
-            if c == "A":
-                candidate.append("C")
-            if c == "C":
-                candidate.append("A")
-            if c == "T":
-                candidate.append("G")            
-            if c == "G":
-                candidate.append("T")
-        
-        candidate = "".join(candidate[::-1])
-       
-        return numerize_kmer(k,min(kmer,candidate))
-"""
+    
     for s in sequences : 
         for i in range(len(s)-k):
             kmer = s[i:i+k]
