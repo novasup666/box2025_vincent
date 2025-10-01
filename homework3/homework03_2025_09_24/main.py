@@ -1,11 +1,14 @@
+#! /usr/bin/env python3
+
 from xopen import xopen 
 from readfa import readfq
+from collections import Counter
 
 file_path = "reads/ecoli_sample_perfect_reads_forward.fasta.gz"
 
-K = 20
+K = 31
 
-t = 3
+t = 1
 
 def get_sequences(fp):
     sequences = []
@@ -13,6 +16,8 @@ def get_sequences(fp):
         for _,seq,_ in readfq(fasta):
             sequences.append(seq)
     return sequences
+
+"""
 
 def build_dbg(k,t,fp):
     sequences = get_sequences(fp)
@@ -32,14 +37,31 @@ def build_dbg(k,t,fp):
                 counts[kmer] +=1
             else:
                 counts[kmer] = 0 
-    for kminusone_mer in dbg.keys() :
+    dbg_keys =  dbg.keys()
+    for kminusone_mer in dbg_keys:
         for b in dbg[kminusone_mer]:
-            if count[kminusone_mer+b] < t : 
+            if counts[kminusone_mer+b] < t : 
                 dbg[kminusone_mer].remove(b)
 
     return dbg,counts
 
-dbg,counts = build_dbg(K,t,file_path)
+"""
+
+def build_dbg(k,t,fp):
+    sequences = get_sequences(fp)
+    dbg = set()
+    kc = Counter()
+    for s in sequences:
+        for i in range(len(s)-k):
+            kmer = s[i:i+k]
+            kc[kmer]+=1
+
+    fkc = {k:n for k,n in kc.items() if n>t}
+    return fkc 
+
+
+
+dbg = build_dbg(K,t,file_path)
 
 
 
