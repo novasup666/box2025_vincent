@@ -49,7 +49,6 @@ def build_dbg(k,t,fp):
 
 def build_dbg(k,t,fp):
     sequences = get_sequences(fp)
-    dbg = set()
     kc = Counter()
     for s in sequences:
         for i in range(len(s)-k):
