@@ -1,30 +1,35 @@
-from pysuffixarray.core import SuffixArray
+import fmindex
 import numpy as np
 
-def BW_transorm(seq):
-    n = len(seq)
-    sa = SuffixArray(seq)
-    suffix_array = sa.suffix_array()
-    bwt = np.char.chararray(n+1)
-    for i in range(n):
-        bwt[i] = seq[suffix_array[i]-1]  if suffix_array[i]>0 else '$'
-    return bwt
 
-def to_RLE(seq):
-    '''
-        seq in [A,T,C,G]*
-    '''
-    n = len(seq)
-    l = []
-    i = 0
-    while i<n:
-        current_char = seq[i]
-        begining_i = i
-        while i<n and seq[i] == current_char:
-            i+=1
-        l.append((current_char,i-begining_i))
-    
-    res = ".".join(map(lambda x : x[0]+str(x[1]), l))
-    return res
+def read_seq(file_name):
+    f = open(file_name,"r")
+    sequences = []
+    l = f.readline()
+    while l!="":
+        if l[0]!=">":
+            sequences.append(l)
+        l = f.readline()
 
-print(BW_transorm("BANANA"))
+    return "".join(sequences)
+
+
+
+
+
+
+
+a = fmindex.FMindex("BANANA")
+print(a.bwt)
+print(a.sa)
+a.encodes_bwt_to_RLE()
+print(a.bwt)
+a.decodes_bwt_from_RLE()
+print(a.bwt)
+print(a.get_string_naive())
+
+print("genome length: ",len(read_seq("ecoli_genome_150k.fa")))
+seq = read_seq("ecoli_genome_150k.fa")
+b = fmindex.FMindex(seq)
+b.encodes_bwt_to_RLE()
+print("RLE(BWT(genome)) length : ",len(b.bwt))
