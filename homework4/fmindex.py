@@ -49,7 +49,9 @@ class FMindex:
         self.bwt = "".join(res)
 
     def _compute_fm_count(self):
-        self.fm_count = Counter(self.bwt)
+        res = Counter()
+        for c in self.bwt:
+            if c
 
 
     # >>===[ Compression functions      ]=======================================
