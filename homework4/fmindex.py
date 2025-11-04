@@ -24,6 +24,7 @@ class FMindex:
     def __init__(self, seq, verbose=False):
         #private variables
         self._seq = seq         #sequence
+        self._sorted_bwt = None 
 
         #public variables
         self.sa = simple_kark_sort(seq+'$')     #suffix array (str list)
@@ -34,6 +35,16 @@ class FMindex:
         self.next_smallest_letter = None
 
         self._build_bwt()
+        self._compute_fm_count()
+        self._compute_fm_rank()
+        self._compute_next_smallest_letter()
+
+        if verbose:
+            print("bwt:",self.bwt)
+            print("fm_count:",self.fm_count)
+            print("fm_rank",self.fm_rank)
+            print("fm_ranks",self.fm_ranks)
+            print("next_smallest_letter",self.next_smallest_letter)
 
     # >>===[ Attribute initialisation functions ]===============================
     def _build_bwt(self):
@@ -47,11 +58,36 @@ class FMindex:
             res[i] = self._seq[self.sa[i]-1]  if self.sa[i]>0 else '$'
 
         self.bwt = "".join(res)
+        res.sort()
+        self._sorted_bwt = "".join(res)
 
     def _compute_fm_count(self):
-        res = Counter()
-        for c in self.bwt:
-            if c
+        res = {}
+        for i in range(len(self._sorted_bwt)):
+            if self._sorted_bwt[i] in res:
+                res[self._sorted_bwt[i]] = i
+        self.fm_count = res
+        self.fm_count["~"] = len(self.bwt)
+
+    def _compute_fm_rank(self):
+        cpt = Counter()
+        res = [0]*len(self.bwt)
+        for i in range(len(self.bwt)):
+            cpt[self.bwt[i]]+=1
+            res[i] = cpt[self.bwt[i]]
+        self.fm_rank  = res
+
+    def _compute_next_smallest_letter():
+        res = {}
+        letters = list(set(self._sorted_bwt)).sorted()
+        for i in range(len(letters)) :
+            if i <len(letters):
+                res[letters[i]] = letters[i+1]
+            else:
+                res[letters[i]] = "~"
+        self.next_smallest_letter = res
+
+
 
 
     # >>===[ Compression functions      ]=======================================
