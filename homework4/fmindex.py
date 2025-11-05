@@ -41,6 +41,7 @@ class FMindex:
 
         if verbose:
             print("bwt:",self.bwt)
+            print("sorted_bwt", self._sorted_bwt)
             print("fm_count:",self.fm_count)
             print("fm_rank",self.fm_rank)
             print("fm_ranks",self.fm_ranks)
@@ -64,10 +65,11 @@ class FMindex:
     def _compute_fm_count(self):
         res = {}
         for i in range(len(self._sorted_bwt)):
-            if self._sorted_bwt[i] in res:
+            if self._sorted_bwt[i] not in res:
                 res[self._sorted_bwt[i]] = i
+
         self.fm_count = res
-        self.fm_count["~"] = len(self.bwt)
+        self.fm_count["~"] = len(self.bwt)-1
 
     def _compute_fm_rank(self):
         cpt = Counter()
@@ -77,11 +79,12 @@ class FMindex:
             res[i] = cpt[self.bwt[i]]
         self.fm_rank  = res
 
-    def _compute_next_smallest_letter():
+    def _compute_next_smallest_letter(self):
         res = {}
-        letters = list(set(self._sorted_bwt)).sorted()
+        letters = list(set(self._sorted_bwt))
+        letters.sort()
         for i in range(len(letters)) :
-            if i <len(letters):
+            if i <len(letters)-1:
                 res[letters[i]] = letters[i+1]
             else:
                 res[letters[i]] = "~"
@@ -141,3 +144,17 @@ class FMindex:
         for i in range(n+1):
             res[self.sa[i]-1] = self.bwt[i]
         return "".join(res)[:-1]
+
+    def _lf_mapping(self, i):
+        return self.fm_count[self.bwt[i]]+self.fm_rank[i]-1
+
+    def get_string(self):
+        seq = ["$"]
+        i = 0
+        for _ in range(len(self.bwt)-1):
+            #print(next_char)
+            char = self.bwt[i]
+            print(seq)
+            seq.append(char)
+            i = self._lf_mapping(i)
+        return "".join(seq[::-1])
