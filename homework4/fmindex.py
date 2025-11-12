@@ -90,6 +90,16 @@ class FMindex:
                 res[letters[i]] = "~"
         self.next_smallest_letter = res
 
+    def _compute_fm_ranks(self):
+        letters = set(self.bwt)
+        cpt = Counter()
+        res = {l:[0]*len(self.bwt) for l in letters}
+        for i in range(len(self.bwt)):
+            char = self.bwt[i]
+            cpt[char]+=1
+            for l in letters:
+                res[l][i]=cpt[l]
+        self.fm_ranks = res
 
 
 
